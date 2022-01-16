@@ -2,5 +2,9 @@
     "token" : "OTMxNTcwMTU3MTE2MDc2MDcz.YeGWUQ.znLOHjk3gQFyrF3QDq3mPKLYokg",
     "clientId": "931570157116076073",
     "guildId": "931576236029931561",
-    "prefix" : "!"
+    "channelId": "931599100988772392",
+    "expiredInSeconds": 60,
+    "maxProcessingCount": 50,
+    "maxImgWidth": 1024,
+    "maxImgHeight": 768
 }

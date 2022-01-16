@@ -1,4 +1,7 @@
-const sharp = require('sharp');
-sharp('bg.png')
-.composite([{ input: 'without_bg_1.png', gravity: 'southeast' }])
-.toFile('output.jpg')
+const fs = require('fs');
+// const { unlinkSync } = require('fs');
+async function mkdir (){
+    fs.rm('./img/866653590134718495', { recursive: true });
+}
+
+mkdir()
