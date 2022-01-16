@@ -20,6 +20,13 @@ const https = require('https');
 const fs = require('fs');
 const sharp = require('sharp');
 const intervalToDuration = require('date-fns/intervalToDuration')
+const aws = require('aws-sdk');
+
+const s3 = new aws.S3({
+    region: 'eu-west-2',
+    accessKeyId: 'AKIAV3G3ADYQ2UYOGJM6',
+    secretAccessKey: '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',
+});
 
 const IMG_FOLDER_PATH = './img';
 const SOURCES_FOLDER_PATH = `${IMG_FOLDER_PATH}/sources`;
@@ -138,23 +145,26 @@ client.on('messageCreate', async (message) => {
 		});
 	}
 
-	try {
-		await fs.rmSync(`${SOURCES_FOLDER_PATH}/${userId}`, { recursive: true });
-	} catch(err){
-		console.log(err)
-	}
+	// try {
+	// 	await fs.rmSync(`${SOURCES_FOLDER_PATH}/${userId}`, { recursive: true });
+	// } catch(err){
+	// 	console.log(err)
+	// }
 
 	removeUserFromProgress(userId)
 });
 
 async function workWithImage(imageUrl, userId){
-	const folderPath = `${SOURCES_FOLDER_PATH}/${userId}`;
-	const sourceFilePath = `${folderPath}/source_${filesCount}.png`;
-	const withoutBgFilePath = `${folderPath}/without_bg_${filesCount}.png`;
-	const outputFilePath = `${RESULTS_FOLDER_PATH}/result_${userId}_${filesCount}.png`;
+	// const folderPath = `${SOURCES_FOLDER_PATH}/${userId}`;
+	// const sourceFilePath = `${folderPath}/source_${filesCount}.png`;
+	// const withoutBgFilePath = `${folderPath}/without_bg_${filesCount}.png`;
+	// const outputFilePath = `${RESULTS_FOLDER_PATH}/result_${userId}_${filesCount}.png`;
+	const sourceFilePath = `source_${filesCount}.png`;
+	const withoutBgFilePath = `without_bg_${filesCount}.png`;
+	const outputFilePath = `result_${userId}_${filesCount}.png`;
 
-	await fs.promises.mkdir(`${folderPath}`, { recursive: true })
-	await fs.promises.mkdir(`${RESULTS_FOLDER_PATH}`, { recursive: true })
+	// await fs.promises.mkdir(`${folderPath}`, { recursive: true })
+	// await fs.promises.mkdir(`${RESULTS_FOLDER_PATH}`, { recursive: true })
 
 	const file = fs.createWriteStream(sourceFilePath);
 	filesCount += 1;
@@ -162,6 +172,21 @@ async function workWithImage(imageUrl, userId){
 	return new Promise((resolve, reject) => {
 		https.get(imageUrl, async function(response) {
 			response.pipe(file);
+			const file2 = fs.createWriteStream(sourceFilePath);
+			const uploadParams = {
+				Bucket: 'catfilterdiscord',
+				Body: file2,
+				Key: 'source_4.png',
+				ACL: 'public-read',
+			}
+			s3.putObject(uploadParams).promise()
+			// reject()
+			// .then(() => {
+			// 	reject()
+			// })
+			// .catch(err => {
+			// 	console.log(err)
+			// })
 
 			try {
 				await nrc.run(`rembg -o ${withoutBgFilePath} ${sourceFilePath}`);
