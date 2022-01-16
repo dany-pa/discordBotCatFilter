@@ -7,6 +7,10 @@
 
 HTTPError [AbortError]: The user aborted a request.
     at RequestHandler.execute (D:\work\blockchain\discordBot\node_modules\discord.js\src\rest\RequestHandler.js:201:15)
+
+	TODO: Написать тесты
+	TODO: Завезти typescript
+
 */
 
 const { Client, Intents } = require('discord.js');
