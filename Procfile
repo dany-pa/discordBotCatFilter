@@ -1,1 +1,1 @@
-worker: pip install rembg && node test.js
+worker: node test.js
