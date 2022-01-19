@@ -194,7 +194,7 @@ async function workWithImage(imageUrl, userId){
 }
 
 client.login(config.token);
-const url = 
+// const url = 
 // 'https://cdn.discordapp.com/attachments/931599100988772392/931633709906534400/EBE7CD17-1E12-4EFE-BF9F-312408B6264D.jpg'
 // 'https://cdn.discordapp.com/attachments/931599100988772392/931634415552069662/file.jpg'
 // 'https://cdn.discordapp.com/attachments/931599100988772392/931632059028488322/kartinki-ryzhih-kotov-1.jpg'
