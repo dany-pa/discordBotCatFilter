@@ -163,10 +163,13 @@ async function workWithImage(imageUrl, userId){
 	return new Promise((resolve, reject) => {
 		https.get(imageUrl, async function(response) {
 			response.pipe(file);
+			console.log('Сохранил файл из дискорда на диск ')
 
 			try {
+				console.log('Запускаю удаление фона')
 				await nrc.run(`rembg -o ${withoutBgFilePath} ${sourceFilePath}`);
 				
+				console.log('Удалил фон')
 				const withoutBgBuffer = await sharp(withoutBgFilePath)
 				.resize({
 					width: config.maxImgWidth,
@@ -174,10 +177,12 @@ async function workWithImage(imageUrl, userId){
 					fit: 'contain'
 				})
 				.toBuffer()
+				console.log('Ресайзнул картинку без фона')
 
 				await sharp('bg.png')
 				.composite([{ input: withoutBgBuffer, gravity: 'southeast' }])
 				.toFile(outputFilePath)
+				console.log('Склеил фон и картинку')
 
 				resolve(outputFilePath)
 			}
