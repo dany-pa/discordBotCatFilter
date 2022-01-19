@@ -139,11 +139,11 @@ client.on('messageCreate', async (message) => {
 		});
 	}
 
-	try {
-		await fs.rmSync(`${SOURCES_FOLDER_PATH}/${userId}`, { recursive: true });
-	} catch(err){
-		console.log(err)
-	}
+	// try {
+	// 	await fs.rmSync(`${SOURCES_FOLDER_PATH}/${userId}`, { recursive: true });
+	// } catch(err){
+	// 	console.log(err)
+	// }
 
 	removeUserFromProgress(userId)
 });
@@ -162,7 +162,7 @@ async function workWithImage(imageUrl, userId){
 
 	return new Promise((resolve, reject) => {
 		https.get(imageUrl, async function(response) {
-			const newFile = response.pipe(file);
+			response.pipe(file);
 
 			try {
 				await nrc.run(`rembg -o ${withoutBgFilePath} ${sourceFilePath}`);
