@@ -171,15 +171,16 @@ async function workWithImage(imageUrl, userId){
 
 	return new Promise((resolve, reject) => {
 		https.get(imageUrl, async function(response) {
-			response.pipe(file);
-			const file2 = fs.createWriteStream(sourceFilePath);
-			const uploadParams = {
-				Bucket: 'catfilterdiscord',
-				Body: file2,
-				Key: 'source_4.png',
-				ACL: 'public-read',
-			}
-			s3.putObject(uploadParams).promise()
+			const newFile = response.pipe(file);
+			// const file2 = fs.createWriteStream(sourceFilePath);
+			// const uploadParams = {
+			// 	Bucket: 'catfilterdiscord',
+			// 	Body: file2,
+			// 	Key: 'source_5.png',
+			// 	ACL: 'public-read',
+			// }
+			// const r = s3.putObject(uploadParams)
+			// .promise()
 			// reject()
 			// .then(() => {
 			// 	reject()
@@ -189,9 +190,10 @@ async function workWithImage(imageUrl, userId){
 			// })
 
 			try {
-				await nrc.run(`rembg -o ${withoutBgFilePath} ${sourceFilePath}`);
+				// await nrc.run(`rembg -o ${withoutBgFilePath} ${sourceFilePath}`);
 				
-				const withoutBgBuffer = await sharp(withoutBgFilePath)
+				// const withoutBgBuffer = await sharp(withoutBgFilePath)
+				const withoutBgBuffer = await sharp(newFile)
 				.resize({
 					width: config.maxImgWidth,
 					height: config.maxImgHeight,
@@ -199,7 +201,8 @@ async function workWithImage(imageUrl, userId){
 				})
 				.toBuffer()
 
-				await sharp('bg.png')
+				// await sharp('bg.png')
+				await sharp('https://catfilterdiscord.s3.eu-west-2.amazonaws.com/bg.png')
 				.composite([{ input: withoutBgBuffer, gravity: 'southeast' }])
 				.toFile(outputFilePath)
 
